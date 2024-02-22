@@ -1,28 +1,27 @@
-class GeneralInfo:
-    def __init__(self, id, name):
-        self._id = id
-        self._name = name
-
-    def get_id(self):
-        return self._id
-    
-    def get_name(self):
-        return self._name
-    
-    def print(self):
-        print("\n{:<15} {:<15}".format("ID", "Name"))
-        print("\n{:<15} {:<15}".format(self.get_id, self.get_name))
-
-class Course(GeneralInfo):
+class Course:
     def __init__(self, idCourse, nameCourse):
-        super().__init__(idCourse, nameCourse)
+        self._idCourse = idCourse
+        self._nameCourse = nameCourse
 
-class Student(GeneralInfo):
+    def get_idC (self):
+        return self._idCourse
+        
+    def get_nameC (self):
+        return self._nameCourse
+
+class Student:
     def __init__(self, idStudent, nameStudent, dobStudent):
-        super().__init__(idStudent, nameStudent)
+        self._idStudent = idStudent
+        self._nameStudent = nameStudent
         self._dob = dobStudent
         self._courses = [] #empty list to store courses
+
+    def get_nameS(self):
+        return self._nameStudent
     
+    def get_idS (self):
+        return self._idStudent
+
     def get_dob(self):
         return self._dob
     
@@ -31,11 +30,6 @@ class Student(GeneralInfo):
         #information about a course and the corresponding mark
         self._courses.append({"Course":course, "Mark": mark}) #add dict to to the end of the list
 
-    def print(self): #overriding
-        print("\n{:<15} {:<15} {:<15}".format("Student ID", "Name", "Date of Birth"))
-        print("{:<15} {:<15} {:<15}".format(self.get_id(), self.get_name(), self.get_dob()))
-        print()
-
     def showFull(self):
         print("\n{:<15} {:<15} {:<15} {:<15} {:<15} {:<15}".format(
             "Student ID", "Name", "Date of Birth", "Course ID", "Course Name", "Mark"))
@@ -43,7 +37,7 @@ class Student(GeneralInfo):
             course = data["Course"]
             mark = data["Mark"]
             print("{:<15} {:<15} {:<15} {:<15} {:<15} {:<15}".format(
-                self.get_id(), self.get_name(), self.get_dob(), course.get_id(), course.get_name(), mark))
+                self.get_idS(), self.get_nameS(), self.get_dob(), course.get_idC(), course.get_nameC(), mark))
         print()
 
 
@@ -60,30 +54,29 @@ class MarkManagement:
             student.showFull()
     
     def showStudentInfo(self):
+        print("{:<15} {:<15} {:<15}".format("Student ID", "Student name", "Date of Birth"))
         for student in self._StudentList:
-            student.print()
+            print("{:<15} {:<15} {:<15}".format(student.get_idS(), student.get_nameS(), student.get_dob()))
 
     def showCourseInfo(self):
-        print("\n{:<15} {:<15}".format("Course ID", "Course name"))
+        print("{:<15} {:<15}".format("Course ID", "Course name"))
         for student in self._StudentList:
             for data in student._courses:
                 course = data["Course"]
-                print("{:<15} {:<15}".format(course.get_id(), course.get_name()))
-            print()
+                print("{:<15} {:<15}".format(course.get_idC(), course.get_nameC()))
 
     def showFollowChoose(self):
         idStudent = input("Enter Student ID: ")
-        idCourse = input("Enter Course ID: ")
-
         found = False
         for student in self._StudentList:
-            if student.get_id()== idStudent:
+            if student.get_idS()== idStudent:
+                idCourse = input("Enter Course ID: ")
                 for data in student._courses:
                     course = data["Course"]
                     mark = data["Mark"]
-                    if course.get_id() == idCourse:
+                    if course.get_idC() == idCourse:
                         found = True
-                        print("\nMark for {} in {}: {}".format(student.get_name(), course.get_name(), mark))
+                        print("\nMark for {} in {}: {}".format(student.get_nameS(), course.get_nameC(), mark))
         if not found:
             print("Student or Course not found.")
 
@@ -109,17 +102,17 @@ def main():
 
     for _ in range(numOfStudent):
         studentInfo = inputStudentInfo()
-        numOfCourse = int(input("Enter number of course for {}: ".format(studentInfo.get_name())))
+        numOfCourse = int(input("Enter number of course for {}: ".format(studentInfo.get_nameS())))
 
         #Student object is created and add to StudentList list
-        student = Student(studentInfo.get_id(), studentInfo.get_name(), studentInfo.get_dob())
+        student = Student(studentInfo.get_idS(), studentInfo.get_nameS(), studentInfo.get_dob())
 
         for _ in range(numOfCourse):
             courseInfo = inputCourseInfo()
             mark = inputMark()
 
             #Course object is created 
-            course = Course(courseInfo.get_id(), courseInfo.get_name())
+            course = Course(courseInfo.get_idC(), courseInfo.get_nameC())
             #adding the course to course list created in Student class
             student.add_course(course, mark)
 
