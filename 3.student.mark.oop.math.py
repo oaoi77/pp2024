@@ -1,9 +1,14 @@
+import numpy as np
 import math
 
 class Course:
-    def __init__(self, idCourse, nameCourse):
+    def __init__(self, idCourse, nameCourse, credit):
         self._idCourse = idCourse
         self._nameCourse = nameCourse
+        self._credit = credit
+
+    def get_credit(self):
+        return self._credit
 
     def get_idC (self):
         return self._idCourse
@@ -31,6 +36,17 @@ class Student:
         #appends a dict to this courses list, where each dict contains 
         #information about a course and the corresponding mark
         self._courses.append({"Course":course, "Mark": mark}) #add dict to to the end of the list
+
+    def gpa(self):
+        marks = np.array([course["Mark"] for course in self._courses])
+        credits = np.array([course["Course"].get_credit() for course in self._courses])
+        
+        total_mark = np.sum(marks * credits)
+        total_credit = np.sum(credits)
+
+        average_gpa = np.round(total_mark / total_credit, 1)
+        return average_gpa
+
 
     def showFull(self):
         print("\n{:<15} {:<15} {:<15} {:<15} {:<15} {:<15}".format(
@@ -61,11 +77,11 @@ class MarkManagement:
             print("{:<15} {:<15} {:<15}".format(student.get_idS(), student.get_nameS(), student.get_dob()))
 
     def showCourseInfo(self):
-        print("{:<15} {:<15}".format("Course ID", "Course name"))
+        print("{:<15} {:<15} {:<15}".format("Course ID", "Course name", "Credits"))
         for student in self._StudentList:
             for data in student._courses:
                 course = data["Course"]
-                print("{:<15} {:<15}".format(course.get_idC(), course.get_nameC()))
+                print("{:<15} {:<15} {:<15}".format(course.get_idC(), course.get_nameC(), course.get_credit()))
 
     def showFollowChoose(self):
         idStudent = input("Enter Student ID: ")
@@ -82,6 +98,13 @@ class MarkManagement:
         if not found:
             print("Student or Course not found.")
 
+    def showGpa(self):
+        sorted_students = sorted(self._StudentList, key=lambda x: x.gpa(), reverse=True)
+        print("{:<15} {:<15} {:<15}".format("Student ID", "Student name", "GPA"))
+        for s in sorted_students:
+            print("{:<15} {:<15} {:<15}".format(s.get_idS(), s.get_nameS(), s.gpa()))
+
+
 def inputStudentInfo():
     idStudent = input("Enter Student's ID: ")
     nameStudent = input("Enter Student's name: ")
@@ -91,7 +114,8 @@ def inputStudentInfo():
 def inputCourseInfo():
     idCourse = input("Enter the Course's ID: ")
     nameCourse = input("Enter the Course's name: ")
-    return Course(idCourse, nameCourse)
+    credit = int(input("Enter the number of credits of course: "))
+    return Course(idCourse, nameCourse, credit)
 
 def inputMark():
     mark = float(input("Enter the mark for this Course: "))
@@ -114,7 +138,7 @@ def main():
             mark = inputMark()
 
             #Course object is created 
-            course = Course(courseInfo.get_idC(), courseInfo.get_nameC())
+            course = Course(courseInfo.get_idC(), courseInfo.get_nameC(), courseInfo.get_credit())
             #adding the course to course list created in Student class
             student.add_course(course, mark)
 
@@ -126,6 +150,7 @@ def main():
         print("2. Show the Course List")
         print("3. Show Student with mark of choosen Course")
         print("4. Show full")
+        print("5. GPA")
         print("0. Exit")
         print("---------------------------------------------------------")
         choice = int(input("Enter your choice: "))
@@ -137,6 +162,8 @@ def main():
             Management_System.showFollowChoose()
         elif choice ==4:
             Management_System.showList()
+        elif choice ==5:
+            Management_System.showGpa()
         elif choice == 0:
             break
         else:
