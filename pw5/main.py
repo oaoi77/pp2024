@@ -15,7 +15,7 @@ def main():
 
         for _ in range(numOfCourse):
             courseInfo = input.inputCourseInfo()
-            mark = input.inputMark()
+            mark = input.inputMark(studentInfo.get_idS(), courseInfo.get_idC())
 
             #Course object is created 
             course = domain.course.Course(courseInfo.get_idC(), courseInfo.get_nameC(), courseInfo.get_credit())

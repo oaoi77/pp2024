@@ -23,11 +23,11 @@ def inputCourseInfo():
         f.write(course)
     return domain.course.Course(idCourse, nameCourse, credit)
 
-def inputMark():
+def inputMark(student_id, course_id):
     mark = float(input("Enter the mark for this Course: "))
     mark_file = f"{mark}\n"
     with open('mark.txt', 'a') as f:
-        f.write(mark_file)
+        f.write(f"{student_id}, {course_id}, {mark_file}")
     return math.floor(mark*10)/10
 
 def inputChoice():
