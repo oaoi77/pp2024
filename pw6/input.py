@@ -6,9 +6,9 @@ import zipfile
 #write to file - 'w' mode
 #append - 'a' mode
 
-file_student = "student.txt"
-file_course = "course.txt"
-file_mark = "mark.txt"
+file_student = "student.pickle"
+file_course = "course.pickle"
+file_mark = "mark.pickle"
 file_zip = "student.dat"
 file_extract = "ex"
 
