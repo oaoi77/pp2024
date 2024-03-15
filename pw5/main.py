@@ -1,5 +1,8 @@
 import domain
 import input
+import os
+import zipfile
+from input import file_student, file_course, file_mark
 
 def main():
     Management_System = domain.management.MarkManagement()
@@ -24,6 +27,14 @@ def main():
 
         #adding the student to the StudentList list 
         Management_System.add_student(student)
+
+    with zipfile.ZipFile("student.dat", "w") as zfile:
+        zfile.write(file_student)
+        zfile.write(file_course)
+        zfile.write(file_mark)
+    #can use os.remove() to remove single file 
+    #if not remove, the data in zipfile will be appended after entering
+
     while True:
         print("---------------------------------------------------------")
         print("1. Show the Student List information")
